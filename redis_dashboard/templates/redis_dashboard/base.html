@@ -1,0 +1,26 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% load adminmedia %}{% admin_media_prefix %}css/dashboard.css" />{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">{% trans 'Django Redis administration' %}</h1>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+  <h2>Display graphics</h2>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<div id="content-related">
+  Display options
+</div>
+{% endblock %}

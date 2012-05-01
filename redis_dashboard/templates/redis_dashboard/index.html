@@ -1,0 +1,97 @@
+{% extends "redis_dashboard/base.html" %}
+{% load i18n %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% load adminmedia %}{% admin_media_prefix %}css/dashboard.css" />{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}dashboard{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="../">
+	{% trans "Home" %}
+  </a> &rsaquo;
+  <a href="{% url redis_dashboard_admin:index %}">
+	{% trans "Redis Dashboard" %}
+  </a>
+</div>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">{% trans 'Django Redis administration' %}</h1>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+  <div class="results">
+	<h2>Redis DBS connections</h2>
+	<table cellspacing="0" id="result_list">
+	  <thead>
+		<tr>
+		  <th scope="col" class="ascending">
+			Alias
+		  </th>
+		  <th>Status</th>
+		  <th>DB size</th>
+		  <th scope="col">
+			server:port[db]
+		  </th>
+		  <th scope="col">
+			Connection info
+		  </th>
+		  <th scope="col">
+			Server info
+		  </th>
+		</tr>
+	  </thead>
+	  <tbody>
+		{% for db in connections %}
+		<tr class="row1">
+		  <td>
+			<b><a href="{% url redis_dashboard_admin:details db.alias %}">{{ db.alias }}</a></b>
+		  </td>
+		  <td>{{ db.status }}</td>
+		  <td>{{ db.connection.dbsize }}</td>
+		  <td>
+			<a href="{% url redis_dashboard_admin:details db.alias %}">
+			  {{ db.connection_params.host }}:{{ db.connection_params.port }}[{{ db.connection_params.db }}]
+			</a>
+		  </td>
+		  <td>
+			<table width="" cellspacing="" cellpadding="" border="0">
+			  {% for param, value in db.connection_params.items %}
+			  <tr>
+				<td>{{ param }}</td><td>{{ value }}</td>
+			  </tr>
+			  {% endfor %}
+			</table>
+		  </td>
+		  <td>
+			<table width="" cellspacing="" cellpadding="" border="0">
+			  {% for param, value in db.info.items %}
+			  <tr>
+				<td>{{ param }}</td><td>{{ value }}</td>
+			  </tr>
+			  {% endfor %}
+		  </table>
+		  </td>
+		</tr>
+		{% endfor %}
+	  </tbody>
+	</table>
+  </div>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<div id="content-related">
+  <table width="" cellspacing="" cellpadding="" border="0">
+	{% for param, value in alias_params.items %}
+	<tr>
+	  <td>{{ param }}</td><td>{{ value }}</td>
+	</tr>
+	{% endfor %}
+  </table>
+</div>
+{% endblock %}
