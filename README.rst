@@ -1,5 +1,5 @@
 Welcome to django_redis_dashboard's documentation!
-================================================
+==================================================
 
 django_redis_dashboard application for monitoring redis servers which
 used by application.
