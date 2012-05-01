@@ -56,8 +56,13 @@ class RedisDashboardDjangoTestSuiteRunner(DjangoTestSuiteRunner):
 
         import subprocess
         redis_config_path = join(dirname(__file__), 'test_redis.conf')
-        print(redis_config_path)
-        #result = subprocess.Popen('redis-server %s' % redis_config_path)
+        self.redis_instance = subprocess.Popen(['redis-server', redis_config_path])
+
+
+    def teardown_test_environment(self, **kwargs):
+        self.redis_instance.kill()
+        super(RedisDashboardDjangoTestSuiteRunner, self).teardown_test_environment(**kwargs)
+
 
 
 def setup_run_tests(*test_args):
