@@ -1,10 +1,19 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
+"""
+redis_dashboard.views
+~~~~~~~~~~~~~~~~~~~~~
+
+Module provide web graphic interface views
+
+:copyright: (c) 2012 by Alexandr Sokolovskiy (alex@obout.ru).
+:license: BSD, see LICENSE for more details.
+"""
+
 
 from functools import update_wrapper
 
 from redis import Redis
-from django.core.urlresolvers import reverse
 from django.contrib.admin.sites import AdminSite
 from django.utils.functional import Promise
 from django.utils.encoding import force_unicode
@@ -50,7 +59,7 @@ def ajax_request(func):
             try:
                 response = func(request, *args, **kwargs)
             except Exception, ex:
-                response = { 'success': False, 'code':500, 'message': ex}
+                response = {'success': False, 'code': 500, 'message': ex}
         else:
             response = {'success': False, 'code': 403, 'message': 'Accepts only POST request'}
         if isinstance(response, dict):
@@ -67,10 +76,10 @@ class RedisDashboardAdminSite(AdminSite):
         super(RedisDashboardAdminSite, self).__init__(name, *args, **kwargs)
         self.app_name = "redis_dashboard_admin"
 
-
     def get_urls(self):
 
         from django.conf.urls.defaults import patterns, url
+
         def wrap(view, cacheable=False):
             def wrapper(*args, **kwargs):
                 return self.admin_view(view, cacheable)(*args, **kwargs)
@@ -79,8 +88,7 @@ class RedisDashboardAdminSite(AdminSite):
         urls = patterns('',
             url(r'^main/$', wrap(self.main_view), name='index'),
             url(r'details/(?P<alias>\w+)/$', wrap(self.details_view), name='details'),
-            url(r'execute-command/$', wrap(self.execute_command), name='execute-command'),
-                         )
+            url(r'execute-command/$', wrap(self.execute_command), name='execute-command'))
         return urls
 
     def details_view(self, request, alias, *args, **kwargs):
@@ -119,7 +127,7 @@ class RedisDashboardAdminSite(AdminSite):
                        'connection_params': connection.connection_pool.connection_kwargs,
                        'info': connection.info()}
 
-        return render(request, "redis_dashboard/index.html", {'connections': build_dbs_data() })
+        return render(request, "redis_dashboard/index.html", {'connections': build_dbs_data()})
 
 
 redis_dashboard_admin = RedisDashboardAdminSite(name="redis_dashboard_admin")

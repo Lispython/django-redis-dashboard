@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 import sys
 from os.path import dirname, abspath, join
 
@@ -47,18 +46,18 @@ if not settings.configured:
             }
         )
 
+# If we move import to top when raised an error
+from django.test.simple import DjangoTestSuiteRunner
 
-from django.test.simple import run_tests
+class RedisDashboardDjangoTestSuiteRunner(DjangoTestSuiteRunner):
 
-## class RedisDashboardDjangoTestSuiteRunner(DjangoTestSuiteRunner):
+    def setup_test_environment(self, **kwargs):
+        super(RedisDashboardDjangoTestSuiteRunner, self).setup_test_environment(**kwargs)
 
-##     def setup_test_environment(self, **kwargs):
-##         super(RedisDashboardDjangoTestSuiteRunner, self).setup_test_environment(**kwargs)
-
-##         import subprocess
-##         redis_config_path = join(dirname(__file__), 'test_redis.conf')
-        ## result = subprocess.Popen('redis-server %s' % redis_config_path)
-
+        import subprocess
+        redis_config_path = join(dirname(__file__), 'test_redis.conf')
+        print(redis_config_path)
+        #result = subprocess.Popen('redis-server %s' % redis_config_path)
 
 
 def setup_run_tests(*test_args):
@@ -66,7 +65,10 @@ def setup_run_tests(*test_args):
         test_args = ['redis_dashboard']
     parent = dirname(abspath(__file__))
     sys.path.insert(0, parent)
-    failures = run_tests(test_args, verbosity=1, interactive=True)
+    test_runner = RedisDashboardDjangoTestSuiteRunner(verbosity=1, interactive=True)
+    failures = test_runner.run_tests(test_args)
+
+    #failures = run_tests(test_args, verbosity=1, interactive=True)
     #failures = RedisDashboardDjangoTestSuiteRunner().run_tests(test_args, verbosity=1, interactive=True)
     sys.exit(failures)
 

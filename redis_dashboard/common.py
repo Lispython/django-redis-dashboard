@@ -1,5 +1,15 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
+"""
+redis_dashboard.common
+~~~~~~~~~~~~~~~~~~~~~~
+
+Core functions to store redis connections
+
+:copyright: (c) 2012 by Alexandr Sokolovskiy (alex@obout.ru).
+:license: BSD, see LICENSE for more details.
+"""
+
 
 from django.conf import settings
 
@@ -11,7 +21,6 @@ class ConnectionError(Exception):
 
 
 class ConnectionsPool(object):
-
 
     def __init__(self):
         self.REDIS_DBS = getattr(settings, 'REDIS_DBS', None)

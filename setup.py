@@ -90,7 +90,7 @@ class run_audit(Command):
 ##     from tests.runtests import run_tests
 ##     return run_tests
 
-from tests.runtests import run_tests
+#from tests.runtests import setup_run_tests
 
 setup(
     name="redis_dashboard",
