@@ -19,9 +19,9 @@ try:
 except:
     has_subprocess = False
 
-from setuptools import Command, setup
+from setuptools import Command, setup, find_packages
 
-__version__ = (0, 0, 2)
+__version__ = (0, 0, 3)
 
 
 try:
@@ -92,6 +92,11 @@ class run_audit(Command):
 
 #from tests.runtests import setup_run_tests
 
+
+install_requires = [
+    'redis'
+]
+
 setup(
     name="redis_dashboard",
     version=".".join(map(str, __version__)),
@@ -102,11 +107,9 @@ setup(
     maintainer = "Alexandr Lispython",
     maintainer_email = "alex@obout.ru",
     url="https://github.com/lispython/django-redis-dashboard",
-    install_requires=[
-        'redis',
-        ],
+    install_requires=install_requires,
     license="BSD",
-#    test_suite="nose.collector",
+    packages=find_packages(exclude=['tests']),
     platforms = ['Linux', 'Mac'],
     classifiers=[
         "Environment :: Web Environment",
